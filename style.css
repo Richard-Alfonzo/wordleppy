@@ -1,3 +1,30 @@
+body {
+  font-family: 'Archivo Black', sans-serif;
+  text-align: center;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin-top: 50px;
+}
+
+#guess-input {
+  display: block;
+  margin: 20px auto;
+  padding: 10px;
+  font-size: 18px;
+  width: 250px;
+  border: 1px solid #ccc;
+}
+
+#mensaje {
+  margin-top: 10px;
+  font-size: 18px;
+  color: rgb(255, 255, 255);
+}
+
 #guess-button {
   display: block;
   margin: 0 auto;
@@ -39,3 +66,4 @@ button:active {
 .gris {
   background-color: #a4aec4;
 }
+
