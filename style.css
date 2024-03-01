@@ -1,69 +1,98 @@
+
 body {
-  font-family: 'Archivo Black', sans-serif;
-  text-align: center;
-  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
   margin: 0;
-  padding: 0;
 }
 
 h1 {
-  margin-top: 50px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.input-area {
+  margin: 30px;
+  text-align: center;
 }
 
 #guess-input {
   display: block;
-  margin: 20px auto;
+  margin: 0 auto 20px;
   padding: 10px;
   font-size: 18px;
   width: 250px;
   border: 1px solid #ccc;
 }
 
-#mensaje {
-  margin-top: 10px;
+#guess-button, #restart-button {
+  display: inline-block;
+  padding: 10px 20px;
   font-size: 18px;
-  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 3px;
+  margin-right: 10px; 
 }
 
 #guess-button {
-  display: block;
-  margin: 0 auto;
-  padding: 10px 20px;
-  font-size: 18px;
   background-color: #0CBABA;
   color: #fff;
-  border: none;
-  border-radius: 3px;
 }
 
-button:active {
-  transform: scale(0.95);
+#guess-button:hover {
+  background-color: #099494;
+}
+
+#restart-button {
+  background-color: #F44336;
+  color: #fff;
+}
+
+#restart-button:hover {
+  background-color: #D32F2F;
 }
 
 .letter {
-  border: 1px solid transparent;
-  padding: 15px;
+  border: 1px solid black;
+  padding: 3px;
   margin: 3px;
   min-width: 20px;
   text-align: center;
   display: inline-block;
-  border-radius: 5px;
 }
 
 .row {
-  letter-spacing: 5px;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
 }
 
+/* Agrega estilos para el mensaje de error */
+#mensaje-error {
+  color: #F44336; 
+  margin-top: 5px;
+  text-align: center;
+  display: none; 
+}
+
+/* Agrega estilos para el mensaje de victoria/perder */
+#mensaje {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Estilos para colores en el juego */
 .verde {
-  background-color: #79b851;
+  background-color: #79b851; 
 }
 
 .amarillo {
-  background-color: #f3c237;
+  background-color: #f3c237; 
 }
 
 .gris {
-  background-color: #a4aec4;
+  background-color: #a4aec4; 
 }
-
