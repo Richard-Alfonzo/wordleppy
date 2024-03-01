@@ -2,18 +2,22 @@ let intentos = 6;
 let intentosRealizados = 0;
 let juegoTerminado = false;
 
-let diccionario = ['APPLE', 'HURLS', 'WINGS', 'YOUTH'];
-let palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
+const URL_API = 'https://clientes.api.greenborn.com.ar/public-random-word';
+
+let palabra = '';
 
 const input = document.getElementById("guess-input");
 const button = document.getElementById("guess-button");
 const restartButton = document.getElementById("restart-button");
 const MENSAJE = document.getElementById("mensaje");
 const GRID = document.getElementById("grid");
+let mensajeError = document.getElementById("mensaje-error");
 
 window.addEventListener('load', init);
 
 function init() {
+    obtenerPalabraDeAPI();
+    restartButton.style.display = "none";
     restartButton.addEventListener("click", reiniciarJuego);
     input.disabled = false;
     input.focus();
@@ -21,6 +25,16 @@ function init() {
     input.addEventListener("input", function () {
         if (this.value.length > 5) {
             this.value = this.value.slice(0, 5);
+        }
+
+        if (this.value.length === 5) {
+            button.disabled = false;
+            mensajeError.innerHTML = "";
+            mensajeError.style.display = "none";
+        } else {
+            button.disabled = true;
+            mensajeError.innerHTML = "¡Faltan letras! Ingresa las 5 letras.";
+            mensajeError.style.display = "block";
         }
     });
 }
@@ -36,12 +50,16 @@ function intentar() {
     const INTENTO = leerIntento();
     console.log(INTENTO);
 
+    if (INTENTO.length !== 5) {
+        mostrarMensajeError("¡Faltan letras! Ingresa las 5 letras.");
+        return;
+    }
+
     const ROW = document.createElement('div');
     ROW.className = 'row';
     GRID.appendChild(ROW);
-    
-    let letrasCorrectas = 0;
-    let letrasAmarillas = 0;
+
+    let todasEnVerde = true;
 
     for (let i in palabra) {
         const SPAN = document.createElement('span');
@@ -50,31 +68,32 @@ function intentar() {
         if (INTENTO[i] === palabra[i]) {
             SPAN.innerHTML = INTENTO[i];
             SPAN.classList.add('verde');
-            letrasCorrectas++;
         } else if (palabra.includes(INTENTO[i]) && !letraEnVerde(INTENTO[i])) {
-            letrasAmarillas++;
             SPAN.innerHTML = INTENTO[i];
             SPAN.classList.add('amarillo');
+            todasEnVerde = false;
         } else {
-            SPAN.innerHTML = '_';
+            SPAN.innerHTML = INTENTO[i];
             SPAN.classList.add('gris');
+            todasEnVerde = false;
         }
 
         ROW.appendChild(SPAN);
+        setTimeout(() => SPAN.style.opacity = 1, 100 * i);
     }
 
-    if (letrasCorrectas === palabra.length) {
-        mostrarMensaje("¡Ganaste! Has adivinado la palabra correctamente.");
+    if (todasEnVerde) {
+        mostrarMensaje("¡Ganaste! Has completado la palabra correctamente.");
         finalizarJuego();
+        return;
     }
-
-    intentosRealizados++;
 
     if (intentosRealizados === intentos) {
         mostrarMensaje("¡Perdiste! Se alcanzó el límite de intentos.");
         finalizarJuego();
     }
 
+    intentosRealizados++;
     input.value = "";
     input.disabled = juegoTerminado;
     actualizarBoton();
@@ -95,8 +114,13 @@ function letraEnVerde(letra) {
 
 function leerIntento() {
     let intento = input.value;
-    intento = intento.toUpperCase(); 
+    intento = intento.toUpperCase();
     return intento;
+}
+
+function mostrarMensajeError(mensaje) {
+    mensajeError.innerHTML = mensaje;
+    mensajeError.style.display = "block";
 }
 
 function mostrarMensaje(mensaje) {
@@ -106,20 +130,49 @@ function mostrarMensaje(mensaje) {
 function finalizarJuego() {
     juegoTerminado = true;
     input.disabled = true;
+    restartButton.style.display = "inline-block";
     actualizarBoton();
 }
 
 function reiniciarJuego() {
     juegoTerminado = false;
     intentosRealizados = 0;
-    palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
+    obtenerPalabraDeAPI();
     input.disabled = false;
+    restartButton.style.display = "none";
     MENSAJE.innerHTML = "";
+    mensajeError.innerHTML = "";
+    mensajeError.style.display = "none";
     input.value = "";
-    Array.from(GRID.children).forEach(row => (row.innerHTML = ""));
+    
+    // Eliminar todas las filas existentes en el GRID
+    while (GRID.firstChild) {
+        GRID.removeChild(GRID.firstChild);
+    }
+
     actualizarBoton();
 }
 
 function actualizarBoton() {
     button.innerHTML = juegoTerminado ? "Volver a Jugar" : "Intentar";
+}
+
+function obtenerPalabraDeAPI() {
+    mostrarMensaje("Cargando...");
+    fetch(URL_API)
+        .then(response => response.json())
+        .then(data => {
+            const palabraAPI = data[0].toUpperCase();
+            if (palabraAPI.length === 5) {
+                palabra = palabraAPI;
+                mensajeError.style.display = "none"; 
+                MENSAJE.innerHTML = ""; 
+            } else {
+                obtenerPalabraDeAPI(); 
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener la palabra de la API:', error);
+            alert('Error al obtener la palabra. Por favor, recarga la página.');
+        });
 }
