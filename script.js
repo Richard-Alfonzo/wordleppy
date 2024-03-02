@@ -1,4 +1,4 @@
-let intentos = 6;
+let intentos = 5;
 let intentosRealizados = 0;
 let juegoTerminado = false;
 
@@ -21,6 +21,13 @@ function init() {
     restartButton.addEventListener("click", reiniciarJuego);
     input.disabled = false;
     input.focus();
+
+
+    input.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            intentar();
+        }
+    });
 
     input.addEventListener("input", function () {
         if (this.value.length > 5) {
@@ -125,6 +132,7 @@ function mostrarMensajeError(mensaje) {
 
 function mostrarMensaje(mensaje) {
     MENSAJE.innerHTML = mensaje;
+    MENSAJE.classList.add(juegoTerminado ? 'mensaje-ganador' : 'mensaje-perdedor');
 }
 
 function finalizarJuego() {
@@ -144,12 +152,7 @@ function reiniciarJuego() {
     mensajeError.innerHTML = "";
     mensajeError.style.display = "none";
     input.value = "";
-    
-    // Eliminar todas las filas existentes en el GRID
-    while (GRID.firstChild) {
-        GRID.removeChild(GRID.firstChild);
-    }
-
+    Array.from(GRID.children).forEach(row => (row.innerHTML = ""));
     actualizarBoton();
 }
 
@@ -158,7 +161,7 @@ function actualizarBoton() {
 }
 
 function obtenerPalabraDeAPI() {
-    mostrarMensaje("Cargando...");
+    mostrarMensaje("Cargando..."); 
     fetch(URL_API)
         .then(response => response.json())
         .then(data => {
