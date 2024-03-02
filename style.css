@@ -1,98 +1,129 @@
-
 body {
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
 }
 
 h1 {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.input-area {
-  margin: 30px;
-  text-align: center;
+  color: #333;
 }
 
 #guess-input {
-  display: block;
-  margin: 0 auto 20px;
-  padding: 10px;
-  font-size: 18px;
-  width: 250px;
-  border: 1px solid #ccc;
+  margin-top: 10px;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 #guess-button, #restart-button {
-  display: inline-block;
   padding: 10px 20px;
-  font-size: 18px;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
   border: none;
-  border-radius: 3px;
-  margin-right: 10px; 
+  border-radius: 8px;
 }
 
 #guess-button {
-  background-color: #0CBABA;
-  color: #fff;
-}
-
-#guess-button:hover {
-  background-color: #099494;
+  background-color: #4CAF50;
+  color: white;
 }
 
 #restart-button {
-  background-color: #F44336;
-  color: #fff;
+  display: none;
+  background-color: #f44336;
+  color: white;
 }
 
-#restart-button:hover {
-  background-color: #D32F2F;
-}
-
-.letter {
-  border: 1px solid black;
-  padding: 3px;
-  margin: 3px;
-  min-width: 20px;
-  text-align: center;
-  display: inline-block;
+#grid {
+  margin-top: 20px;
 }
 
 .row {
-  margin-bottom: 10px;
   display: flex;
   justify-content: center;
 }
 
-/* Agrega estilos para el mensaje de error */
-#mensaje-error {
-  color: #F44336; 
-  margin-top: 5px;
-  text-align: center;
-  display: none; 
+.letter {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  opacity: 0;
 }
 
-/* Agrega estilos para el mensaje de victoria/perder */
-#mensaje {
-  text-align: center;
-  margin-top: 20px;
-}
-
-/* Estilos para colores en el juego */
 .verde {
-  background-color: #79b851; 
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
 }
 
 .amarillo {
-  background-color: #f3c237; 
+  background-color: #ffeb3b;
+  color: #333;
+  border-color: #ffeb3b;
 }
 
 .gris {
-  background-color: #a4aec4; 
+  background-color: #ddd;
+  color: #333;
+  border-color: #ddd;
+}
+
+.mensaje-ganador {
+  color: #4CAF50;
+  font-size: 24px;
+  font-family: 'Courier New', monospace;
+  text-decoration: underline;
+}
+
+.mensaje-perdedor {
+  color: #f44336;
+  font-size: 24px;
+  font-family: 'Arial', sans-serif;
+  font-style: italic;
+}
+
+
+#mensaje {
+  animation: salto 0.5s infinite alternate; 
+}
+
+@keyframes salto {
+  0% {
+      transform: translateY(0);
+  }
+  100% {
+      transform: translateY(-10px);
+  }
+}
+
+
+@keyframes mensajeGanador {
+  from {
+      opacity: 0;
+      transform: translateY(-50px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+@keyframes mensajePerdedor {
+  from {
+      opacity: 0;
+      transform: translateY(50px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
 }
